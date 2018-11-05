@@ -1778,9 +1778,10 @@ loo_se_ridgeaug <- function(outcomes, metadata, covs=NULL,
             se <- sqrt(t(errs^2) %*% aug_t$weights^2)
         } else if(hc ==-1) {
             if(trt_effect) {
-                se <- (1 / sqrt(sum(ipw_dat$trt==1)) + ## contribution from treated unit
-                       sqrt(apply(errs^2, 2, mean))) * ## contribution from weights
-                    sqrt(sum(aug_t$weights^2)) ## estimate of variance
+                se <- sqrt((1 / sum(ipw_dat$trt==1) + ## contribution from treated unit
+                       sum(aug_t$weights^2)) * ## contribution from weights
+                       apply(errs^2, 2, mean)) ## estimate of variance
+                     
             } else {
                 se <- sqrt(apply(errs^2, 2, mean)) * sqrt(sum(aug_t$weights^2))
             }
